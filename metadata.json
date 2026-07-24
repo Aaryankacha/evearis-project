@@ -1,0 +1,6 @@
+{
+  "name": "NEXUS CORE",
+  "description": "NEXUS CORE premium PC showroom hero",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
