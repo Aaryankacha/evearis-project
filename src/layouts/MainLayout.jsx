@@ -5,7 +5,7 @@ import AmbientBackground from '../components/common/AmbientBackground';
 import { useCart } from '../context/CartContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export const MainLayout = ({ children, noPaddingTop = false }) => {
+export const MainLayout = ({ children, noPaddingTop = false, isHome = false, splineLoaded = true }) => {
   const { toastMessage } = useCart();
 
   return (
@@ -13,7 +13,7 @@ export const MainLayout = ({ children, noPaddingTop = false }) => {
       {/* Subtle Ambient Background System */}
       <AmbientBackground />
 
-      <Navbar />
+      <Navbar isHome={isHome} splineLoaded={splineLoaded} />
 
       <motion.main
         initial={{ opacity: 0, y: 12 }}

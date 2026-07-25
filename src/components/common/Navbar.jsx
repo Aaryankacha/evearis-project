@@ -3,8 +3,9 @@ import { Link, NavLink } from 'react-router-dom';
 import { ShoppingBag, Menu, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { Button } from './Button';
+import { motion } from 'framer-motion';
 
-export const Navbar = () => {
+export const Navbar = ({ isHome = false, splineLoaded = true }) => {
   const { totalItems } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -16,7 +17,10 @@ export const Navbar = () => {
   ];
 
   return (
-    <header
+    <motion.header
+      initial={isHome ? { opacity: 0 } : { opacity: 1 }}
+      animate={{ opacity: (isHome && !splineLoaded) ? 0 : 1 }}
+      transition={{ duration: 0.8, delay: isHome ? 0.2 : 0, ease: 'easeOut' }}
       style={{
         position: 'fixed',
         top: '24px',
@@ -115,7 +119,7 @@ export const Navbar = () => {
           </div>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 };
 

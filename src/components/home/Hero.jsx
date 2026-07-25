@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect, useMemo, useRef, Suspense, lazy, memo } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Spline from '@splinetool/react-spline';
 import SplineErrorBoundary from './SplineErrorBoundary';
 import { Button } from '../common/Button';
+
+const Spline = lazy(() => import('@splinetool/react-spline'));
+const MemoizedSpline = memo(Spline);
 
 const checkWebGLSupport = () => {
   try {
@@ -16,6 +18,36 @@ const checkWebGLSupport = () => {
     return false;
   }
 };
+
+const LoadingScreen = () => (
+  <motion.div
+    initial={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.8, ease: 'easeInOut' }}
+    className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#1C1C1C] overflow-hidden pointer-events-none"
+  >
+    <div className="relative flex items-center justify-center">
+      <motion.div
+        animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute w-48 h-48 rounded-full border border-white/5 bg-[#242424]/50 blur-xl"
+      />
+      <div className="flex flex-col items-center justify-center relative z-10 space-y-4">
+        <span className="font-mono text-2xl font-light tracking-[0.5em] text-white">NEXUS</span>
+        <div className="flex gap-2">
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              animate={{ opacity: [0.2, 1, 0.2] }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+              className="w-1.5 h-1.5 rounded-full bg-white/60"
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const HeroFallbackGraphic = () => (
   <div className="relative flex h-full w-full items-center justify-center bg-[#1C1C1C] overflow-hidden">
@@ -34,39 +66,46 @@ const HeroFallbackGraphic = () => (
   </div>
 );
 
-export const Hero = () => {
+export const Hero = ({ splineLoaded, setSplineLoaded }) => {
   const containerRef = useRef(null);
-  const [sceneLoaded, setSceneLoaded] = useState(false);
-  const [uiReady, setUiReady] = useState(false);
   const [webglFailed, setWebglFailed] = useState(false);
-  const [canvasTransform, setCanvasTransform] = useState('perspective(1800px) rotateX(0deg) rotateY(0deg)');
 
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -30]);
 
-  const isWebGLSupported = useMemo(() => checkWebGLSupport(), []);
+  // Framer motion values to avoid React re-renders on mouse move
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [2, -2]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-2, 2]);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setUiReady(true), 400);
-    return () => window.clearTimeout(timer);
-  }, [sceneLoaded]);
+  const canvasTransform = useMotionTemplate`perspective(1800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`;
+
+  const isWebGLSupported = useMemo(() => checkWebGLSupport(), []);
 
   const handlePointerMove = (e) => {
     const bounds = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - bounds.left;
     const y = e.clientY - bounds.top;
-    const rotateY = ((x / bounds.width) - 0.5) * 4;
-    const rotateX = -((y / bounds.height) - 0.5) * 4;
-    setCanvasTransform(`perspective(1800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+    
+    // Normalize coordinates between -0.5 and 0.5
+    mouseX.set((x / bounds.width) - 0.5);
+    mouseY.set((y / bounds.height) - 0.5);
   };
 
   const handlePointerLeave = () => {
-    setCanvasTransform('perspective(1800px) rotateX(0deg) rotateY(0deg)');
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
   return (
     <section ref={containerRef} className="relative min-h-[90vh] lg:min-h-screen w-full overflow-hidden bg-[#1C1C1C] flex flex-col justify-start">
+      <AnimatePresence>
+        {!splineLoaded && <LoadingScreen />}
+      </AnimatePresence>
+
       {/* Oversized Background Watermark Typography */}
       <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-hidden select-none">
         <span className="text-[18vw] font-black tracking-tighter text-white/[0.015] font-mono uppercase whitespace-nowrap">
@@ -79,9 +118,12 @@ export const Hero = () => {
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
-        <div
-          className="h-full w-full transition-transform duration-700 ease-out origin-center scale-[1.15] translate-x-4 sm:translate-x-8 lg:translate-x-16"
-          style={{ transform: `${canvasTransform} scale(1.15)` }}
+        <motion.div
+          className="h-full w-full origin-center translate-x-4 sm:translate-x-8 lg:translate-x-16"
+          style={{ transform: canvasTransform }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: splineLoaded ? 1 : 0 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
         >
           {!isWebGLSupported || webglFailed ? (
             <HeroFallbackGraphic />
@@ -90,15 +132,17 @@ export const Hero = () => {
               onError={() => setWebglFailed(true)}
               fallback={<HeroFallbackGraphic />}
             >
-              <Spline
-                scene="https://prod.spline.design/naw28P9AHb6G-heB/scene.splinecode"
-                onLoad={() => setSceneLoaded(true)}
-                onError={() => setWebglFailed(true)}
-                className="h-full w-full opacity-80"
-              />
+              <Suspense fallback={null}>
+                <MemoizedSpline
+                  scene="https://prod.spline.design/naw28P9AHb6G-heB/scene.splinecode"
+                  onLoad={() => setSplineLoaded(true)}
+                  onError={() => setWebglFailed(true)}
+                  className="h-full w-full opacity-80"
+                />
+              </Suspense>
             </SplineErrorBoundary>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Hero Content Overlay (Small, Compact, Top Left Corner) */}
@@ -109,8 +153,8 @@ export const Hero = () => {
         <div className="w-full space-y-3.5 pointer-events-auto">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
-            animate={uiReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+            animate={splineLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
             className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9D9D9D]"
           >
             NEXUS CORE ARCHITECTURE
@@ -118,8 +162,8 @@ export const Hero = () => {
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
-            animate={uiReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.65, delay: 0.1, ease: 'easeOut' }}
+            animate={splineLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.65, delay: 0.4, ease: 'easeOut' }}
             className="text-2xl sm:text-3xl font-light tracking-tight text-white leading-tight"
           >
             Precision Silicon.
@@ -127,8 +171,8 @@ export const Hero = () => {
 
           <motion.p
             initial={{ opacity: 0, y: 15 }}
-            animate={uiReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
+            animate={splineLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: 0.45, ease: 'easeOut' }}
             className="text-xs text-[#9D9D9D] font-normal leading-relaxed"
           >
             Engineered with quiet thermal dynamics and raw compute power.
@@ -136,8 +180,8 @@ export const Hero = () => {
 
           <motion.div
             initial={{ opacity: 0, y: 15 }}
-            animate={uiReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+            animate={splineLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: 'easeOut' }}
             className="pt-1.5 flex items-center gap-2.5"
           >
             <Link to="/products">
