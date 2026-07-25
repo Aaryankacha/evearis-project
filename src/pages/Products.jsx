@@ -67,7 +67,14 @@ export const Products = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+        {/* Oversized Background Watermark */}
+        <div className="absolute top-0 left-0 right-0 pointer-events-none flex items-start justify-center overflow-hidden select-none h-80">
+          <span className="text-[14vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap mt-12">
+            CATALOG
+          </span>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,6 +146,13 @@ export const Products = () => {
             );
           })}
         </motion.div>
+
+        {/* Result Count */}
+        <div className="text-center">
+          <span className="text-[11px] font-mono text-[#9D9D9D] uppercase tracking-widest">
+            {filteredProducts.length} {filteredProducts.length === 1 ? 'PRODUCT' : 'PRODUCTS'} FOUND
+          </span>
+        </div>
 
         {/* Product Grid */}
         <AnimatePresence mode="wait">

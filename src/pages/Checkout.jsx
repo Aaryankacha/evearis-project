@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import MainLayout from '../layouts/MainLayout';
 import { Heading } from '../components/common/Heading';
 import { Card } from '../components/common/Card';
@@ -55,10 +56,20 @@ export const Checkout = () => {
     return (
       <MainLayout>
         <div className="max-w-2xl mx-auto px-6 py-24 text-center space-y-8">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
           <Card className="p-10 space-y-6">
-            <div className="w-16 h-16 bg-[#1C1C1C] border border-white/10 text-white rounded-full flex items-center justify-center mx-auto">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2, type: 'spring', stiffness: 200 }}
+              className="w-16 h-16 bg-[#1C1C1C] border border-white/10 text-white rounded-full flex items-center justify-center mx-auto"
+            >
               <ShieldCheck className="w-8 h-8" />
-            </div>
+            </motion.div>
 
             <div className="space-y-2">
               <span className="text-[11px] font-mono uppercase tracking-[0.28em] text-[#9D9D9D]">
@@ -91,6 +102,7 @@ export const Checkout = () => {
               </Link>
             </div>
           </Card>
+          </motion.div>
         </div>
       </MainLayout>
     );
@@ -98,8 +110,15 @@ export const Checkout = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
-        {/* Header */}
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+        {/* Oversized Background Watermark */}
+        <div className="absolute top-0 left-0 right-0 pointer-events-none flex items-start justify-center overflow-hidden select-none h-60">
+          <span className="text-[14vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap mt-8">
+            CHECKOUT
+          </span>
+        </div>
+
+        {/* Header */}}
         <div className="flex items-center justify-between pb-6 border-b border-white/5">
           <Heading
             eyebrow="SECURE CHECKOUT"
@@ -132,7 +151,13 @@ export const Checkout = () => {
         ) : (
           <form onSubmit={handleSubmitOrder} className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
             {/* Customer & Shipping Details */}
-            <Card hoverEffect={false} className="lg:col-span-2 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+              className="lg:col-span-2"
+            >
+            <Card hoverEffect={false} className="space-y-8">
               <div className="space-y-4">
                 <h3 className="text-xs font-mono uppercase tracking-widest text-white">
                   1. Contact & Shipping Telemetry
@@ -214,7 +239,7 @@ export const Checkout = () => {
                 </h3>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <label className="p-4 bg-[#1C1C1C] border border-white/10 rounded-full flex items-center justify-center gap-3 cursor-pointer">
+                <label className={`p-4 bg-[#1C1C1C] border rounded-full flex items-center justify-center gap-3 cursor-pointer transition-all duration-300 ${form.paymentMethod === 'card' ? 'border-white/20' : 'border-white/5 hover:border-white/10'}`}>
                     <input
                       type="radio"
                       name="paymentMethod"
@@ -225,7 +250,7 @@ export const Checkout = () => {
                     <span className="text-xs font-mono text-white uppercase">Credit Card</span>
                   </label>
 
-                  <label className="p-4 bg-[#1C1C1C] border border-white/5 rounded-full flex items-center justify-center gap-3 cursor-pointer">
+                <label className={`p-4 bg-[#1C1C1C] border rounded-full flex items-center justify-center gap-3 cursor-pointer transition-all duration-300 ${form.paymentMethod === 'crypto' ? 'border-white/20' : 'border-white/5 hover:border-white/10'}`}>
                     <input
                       type="radio"
                       name="paymentMethod"
@@ -238,6 +263,7 @@ export const Checkout = () => {
                 </div>
               </div>
             </Card>
+            </motion.div>
 
             {/* Order Review & Complete Order */}
             <Card hoverEffect={false} className="lg:col-span-1 space-y-6 sticky top-28">

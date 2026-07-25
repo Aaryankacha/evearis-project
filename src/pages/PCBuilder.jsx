@@ -71,7 +71,14 @@ export const PCBuilder = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+        {/* Oversized Background Watermark */}
+        <div className="absolute top-0 left-0 right-0 pointer-events-none flex items-start justify-center overflow-hidden select-none h-80">
+          <span className="text-[12vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap mt-8">
+            CONFIGURATOR
+          </span>
+        </div>
+
         <Heading
           eyebrow="RIG CONFIGURATOR"
           title="Architect Your Custom System"
@@ -79,7 +86,12 @@ export const PCBuilder = () => {
         />
 
         {/* Builder Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start"
+        >
           {/* Component Selection Slots Sidebar */}
           <div className="lg:col-span-2">
             <BuilderSidebar
@@ -99,19 +111,27 @@ export const PCBuilder = () => {
               onAddToCart={handleAddBuildToCart}
             />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Component Picker Modal */}
       <AnimatePresence>
         {activeCategoryModal && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setActiveCategoryModal(null)}
+          >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 15, scale: 0.97 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
               className="bg-[#242424] border border-white/10 rounded-[24px] p-6 lg:p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto space-y-6 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between pb-4 border-b border-white/5">
                 <h3 className="text-base font-mono uppercase tracking-wider text-white">
@@ -156,7 +176,7 @@ export const PCBuilder = () => {
                   ))}
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </MainLayout>

@@ -3,21 +3,17 @@ export default {
   theme: {
     extend: {
       boxShadow: {
-        glow: '0 0 80px rgba(57, 169, 255, 0.14)',
+        glow: '0 0 80px rgba(255, 255, 255, 0.06)',
       },
       colors: {
         nexus: {
-          dark: '#050505',
-          blue: '#39A9FF',
-          cyan: '#8AE3FF',
-          soft: '#F5F9FF',
+          dark: '#1C1C1C',
+          surface: '#242424',
+          muted: '#9D9D9D',
+          light: '#F5F5F5',
         },
-      },
-      backgroundImage: {
-        'hero-vignette': 'radial-gradient(circle at top, rgba(57, 169, 255, 0.14), transparent 30%), radial-gradient(circle at 70% 20%, rgba(58, 207, 255, 0.08), transparent 18%)',
       },
     },
   },
   plugins: [],
 };
-

@@ -35,6 +35,13 @@ const performanceData = [
 export const Performance = () => {
   return (
     <section id="performance" className="relative z-10 mx-auto max-w-[1440px] px-6 lg:px-12 py-24 lg:py-36">
+      {/* Oversized Background Watermark */}
+      <div className="absolute inset-0 pointer-events-none flex items-center justify-center overflow-hidden select-none">
+        <span className="text-[14vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap">
+          BENCHMARK
+        </span>
+      </div>
+
       {/* Seamless Section Divider */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-20" />
 
@@ -77,8 +84,8 @@ export const Performance = () => {
                           initial={{ width: 0 }}
                           whileInView={{ width: `${Math.min(row.value, 100)}%` }}
                           viewport={{ once: true, amount: 0.4 }}
-                          transition={{ duration: 0.8, delay: cardIndex * 0.08 + index * 0.06, ease: 'easeOut' }}
-                          className="h-full rounded-full bg-[#F5F5F5]"
+                          transition={{ duration: 1, delay: cardIndex * 0.1 + index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                          className="h-full rounded-full bg-gradient-to-r from-[#F5F5F5] to-[#F5F5F5]/60"
                         />
                       </div>
                     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import MainLayout from '../layouts/MainLayout';
 import CartItem from '../components/cart/CartItem';
 import { Heading } from '../components/common/Heading';
@@ -14,7 +15,14 @@ export const Cart = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-12">
+        {/* Oversized Background Watermark */}
+        <div className="absolute top-0 left-0 right-0 pointer-events-none flex items-start justify-center overflow-hidden select-none h-60">
+          <span className="text-[14vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap mt-8">
+            ORDER
+          </span>
+        </div>
+
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
           <Heading
@@ -62,13 +70,19 @@ export const Cart = () => {
                 </button>
               </div>
 
-              {cart.map((item) => (
-                <CartItem
+              {cart.map((item, index) => (
+                <motion.div
                   key={item.id}
-                  item={item}
-                  onUpdateQuantity={updateQuantity}
-                  onRemove={removeFromCart}
-                />
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.06, ease: 'easeOut' }}
+                >
+                  <CartItem
+                    item={item}
+                    onUpdateQuantity={updateQuantity}
+                    onRemove={removeFromCart}
+                  />
+                </motion.div>
               ))}
             </div>
 

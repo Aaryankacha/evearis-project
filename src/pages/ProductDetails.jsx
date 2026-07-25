@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import MainLayout from '../layouts/MainLayout';
 import ProductGallery from '../components/product/ProductGallery';
 import ProductCard from '../components/product/ProductCard';
@@ -40,18 +41,33 @@ export const ProductDetails = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-16">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12 py-12 space-y-16">
+        {/* Oversized Product Name Watermark */}
+        <div className="absolute top-0 left-0 right-0 pointer-events-none flex items-start justify-center overflow-hidden select-none h-80">
+          <span className="text-[10vw] font-black tracking-tighter text-white/[0.012] font-mono uppercase whitespace-nowrap mt-8">
+            {product.category}
+          </span>
+        </div>
+
         {/* Back Link */}
-        <button
+        <motion.button
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
           onClick={() => navigate(-1)}
           className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#9D9D9D] hover:text-white transition-colors font-mono"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Hardware Catalog</span>
-        </button>
+        </motion.button>
 
         {/* Hero Product Detail Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start"
+        >
           {/* Gallery View */}
           <ProductGallery product={product} />
 
@@ -147,11 +163,17 @@ export const ProductDetails = () => {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Specifications Table */}
         {product.specs && (
-          <div className="pt-10 border-t border-white/5 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="pt-10 border-t border-white/5 space-y-6"
+          >
             <h2 className="text-2xl font-light text-white tracking-tight">Technical Specifications</h2>
             <Card className="p-0 overflow-hidden divide-y divide-white/5">
               {Object.entries(product.specs).map(([key, val]) => (
@@ -161,19 +183,25 @@ export const ProductDetails = () => {
                 </div>
               ))}
             </Card>
-          </div>
+          </motion.div>
         )}
 
         {/* Related Hardware Section */}
         {relatedProducts.length > 0 && (
-          <div className="space-y-8 pt-10 border-t border-white/5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-8 pt-10 border-t border-white/5"
+          >
             <h2 className="text-2xl font-light text-white tracking-tight">Complementary Silicon</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedProducts.map((rel) => (
                 <ProductCard key={rel.id} product={rel} />
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </MainLayout>
