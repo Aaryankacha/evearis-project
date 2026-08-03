@@ -1,116 +1,72 @@
-<div align="center">
+# NEXUS CORE
 
-# ⚡ NEXUS CORE
+A premium full-stack MERN web application for a fictional high-end PC hardware brand. NEXUS CORE combines a modern product showcase with immersive 3D visuals, smooth animations, a custom PC builder, and a complete shopping experience to demonstrate end-to-end full-stack development.
 
-### Premium Full-Stack MERN Hardware Store & Custom PC Builder
+🌐 **Live Demo:** https://evearis-project.vercel.app/
 
-A modern, interactive, Apple-inspired web experience for a fictional high-end PC hardware brand, featuring a cinematic 3D landing page, premium UI, product catalog, custom PC builder, shopping cart, and responsive design.
-
-[Live Demo](YOUR_DEPLOYMENT_URL) • [Report Bug](../../issues) • [Request Feature](../../issues)
-
-</div>
+📂 **Repository:** https://github.com/Aaryankacha/evearis-project
 
 ---
 
-## 📖 Overview
+## Preview
 
-**NEXUS CORE** is a full-stack MERN web application built as a premium showcase for modern frontend and backend development.
-
-Instead of creating another traditional e-commerce website, the goal was to design an immersive product experience inspired by brands like **Apple**, **Nothing**, **NVIDIA**, and **Razer**.
-
-The project combines cinematic UI design, interactive 3D experiences, smooth animations, and a complete shopping workflow while maintaining clean software architecture.
+> *A premium Apple-inspired hardware website featuring interactive 3D experiences, cinematic UI, and a complete shopping workflow.*
 
 ---
 
-# ✨ Features
+## Features
 
-## 🎨 Premium UI/UX
-
-- Apple-inspired minimal design
-- Interactive 3D Hero (Spline)
-- Responsive layouts
+### 🎨 Modern Premium UI
+- Interactive 3D Hero Section (Spline)
+- Minimal Apple-inspired design
+- Responsive layout
 - Smooth page transitions
-- Elegant hover interactions
-- Framer Motion animations
-- Modern typography
-- Monochrome design language
+- Scroll-based animations
+- Premium micro-interactions
 
----
+### 🖥️ Product Catalog
+- Browse premium PC hardware
+- Product categories
+- Search and filtering
+- Product detail pages
+- Related product recommendations
 
-## 🛒 Product Catalog
-
-- Browse hardware components
-- Search products
-- Category filtering
-- Sorting
-- Product details
-- Related products
-- Responsive product cards
-
----
-
-## 🖥️ Custom PC Builder
-
-Build your own PC by selecting:
-
-- CPU
-- GPU
-- Motherboard
-- RAM
-- SSD
-- Power Supply
-- Cooling
-- PC Case
-
-Features:
-
-- Live compatibility checking
-- Estimated power usage
-- Estimated gaming performance
+### ⚙️ Custom PC Builder
+- Build a complete custom PC
+- Live compatibility checks
+- Estimated power consumption
+- Performance estimation
 - Dynamic price calculation
-- Build summary
-- Add custom build to cart
 
----
-
-## 🛍️ Shopping Experience
-
-- Add to cart
-- Update quantities
-- Remove products
-- Order summary
+### 🛒 Shopping Experience
+- Shopping cart
+- Quantity management
 - Checkout flow
+- Order summary
+- Responsive cart UI
 
----
-
-## ⚙️ Backend
-
-REST API built using Express.
-
-Features include:
-
+### 🚀 Backend
+- RESTful API
+- MongoDB integration
 - Product management
 - Cart management
-- Order processing
-- PC Builder calculations
-- MongoDB integration
+- Order management
+- Modular Express architecture
 
 ---
 
-# 🚀 Tech Stack
+## Tech Stack
 
-## Frontend
+### Frontend
 
 - React
 - Vite
 - Tailwind CSS
 - Framer Motion
-- React Router
+- React Router DOM
 - Spline
 
----
-
-## Backend
+### Backend
 
 - Node.js
 - Express.js
@@ -119,89 +75,81 @@ Features include:
 
 ---
 
-## Development Tools
+## Project Structure
 
-- Git
-- GitHub
-- VS Code
-- npm
-
----
-
-# 📂 Project Structure
-
-```text
-NEXUS-CORE/
+```
+client/
 │
-├── client/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── layouts/
-│   │   ├── context/
-│   │   ├── services/
-│   │   ├── hooks/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   │
-│   └── package.json
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── pages/
+│   ├── layouts/
+│   ├── services/
+│   ├── context/
+│   └── App.jsx
 │
-├── server/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── seed/
-│   ├── utils/
-│   ├── server.js
-│   └── package.json
+server/
 │
-└── README.md
+├── controllers/
+├── models/
+├── routes/
+├── middleware/
+├── config/
+└── server.js
 ```
 
 ---
 
-# 🎯 Pages
+## Pages
 
 - 🏠 Home
-- 🛍️ Products
-- 📦 Product Details
-- 🖥️ PC Builder
+- 📦 Products
+- 🔍 Product Details
+- 🛠️ PC Builder
 - 🛒 Shopping Cart
 - 💳 Checkout
 
 ---
 
-# ⚡ Installation
+## Installation
 
-## Clone Repository
-
-```bash
-git clone https://github.com/aaryankacha/nexus-core.git
-```
+Clone the repository
 
 ```bash
-cd nexus-core
+git clone https://github.com/Aaryankacha/evearis-project.git
 ```
 
----
+Navigate into the project
 
-## Install Dependencies
+```bash
+cd evearis-project
+```
 
-### Client
+### Install Frontend
 
 ```bash
 cd client
 npm install
 ```
 
-### Server
+Start the frontend
+
+```bash
+npm run dev
+```
+
+### Install Backend
 
 ```bash
 cd ../server
 npm install
+```
+
+Start the backend
+
+```bash
+npm run dev
 ```
 
 ---
@@ -213,96 +161,60 @@ Create a `.env` file inside the **server** directory.
 ```env
 PORT=5000
 
-MONGO_URI=mongodb://127.0.0.1:27017/nexuscore
+MONGODB_URI=mongodb://127.0.0.1:27017/nexuscore
 ```
 
 ---
 
-## Start MongoDB
+## Screenshots
 
-Ensure MongoDB is running locally.
+> Add screenshots or GIFs of:
 
----
-
-## Run Backend
-
-```bash
-cd server
-npm run dev
-```
+- Hero Section
+- Products Page
+- Product Details
+- PC Builder
+- Shopping Cart
+- Checkout
 
 ---
 
-## Run Frontend
+## Future Improvements
 
-```bash
-cd client
-npm run dev
-```
-
----
-
-Visit:
-
-```
-http://localhost:5173
-```
-
----
-
-# 🌟 Future Improvements
-
-- Product comparison
+- User Authentication
 - Wishlist
-- User authentication
-- Admin dashboard
-- Payment gateway integration
-- Live hardware pricing
-- Benchmark API integration
-- AI-powered PC recommendations
+- Product Comparison
+- Live Hardware Pricing
+- Real-time Benchmark API Integration
+- Payment Gateway
+- Admin Dashboard
+- Order History
 
 ---
 
-# 📸 Screenshots
+## What I Learned
 
-| Home | Products |
-|------|----------|
-| Add Screenshot | Add Screenshot |
+This project helped me gain hands-on experience with:
 
-| PC Builder | Product Details |
-|-------------|----------------|
-| Add Screenshot | Add Screenshot |
-
----
-
-# 🎨 Design Inspiration
-
-This project draws inspiration from:
-
-- Apple
-- Nothing
-- NVIDIA
-- Razer
-- Awwwards
-- Linear
+- Building scalable React applications
+- Creating reusable UI components
+- Designing premium user interfaces
+- Managing application state
+- Building REST APIs using Express
+- Working with MongoDB and Mongoose
+- Implementing responsive layouts
+- Creating smooth animations using Framer Motion
+- Structuring a full-stack MERN application
 
 ---
 
-# 👨‍💻 Author
+## Author
 
 **Aryan Kacha**
+
+GitHub: https://github.com/Aaryankacha
 ---
 
-# ⭐ If you like this project
+## License
 
-Please consider giving the repository a ⭐.
-
-It motivates me to continue building high-quality open-source projects.
-
----
-
-<div align="center">
-
-Made with ❤️ using the MERN Stack
-
-</div>
+This project is built for educational and portfolio purposes.
